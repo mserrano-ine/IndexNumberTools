@@ -1,11 +1,10 @@
-#' Get pyp indices
+#' Get pyp indices (univariate)
 #'
-#' Computes the pyp index series from a chain-linked series.
+#' Computes the pyp index series from an univariate chain-linked series.
 #'
 #' @param x A chain-linked series (with annual overlap) of class "ts".
 #' @returns The pyp series of class "ts".
-#' @export
-pyp_from_chain <- function(x) {
+pyp_from_chain_uni <- function(x) {
   if (!("ts" %in% class(x))) {
     stop("<x> is not 'ts'.")
   }
@@ -19,6 +18,34 @@ pyp_from_chain <- function(x) {
     ts(start = start(x_a_lagged), frequency = frequency(x))
   x_pyp <- x/x_a_aux*100
   return(x_pyp)
+}
+
+#' Get pyp indices
+#'
+#' Computes the pyp index series from a chain-linked series.
+#'
+#' @param x A chain-linked series (with annual overlap) of class "ts".
+#' @returns The pyp series of class "ts".
+#' @examples
+#' set.seed(23)
+#' x <- sample(95:105, 24, TRUE) |>
+#'   ts(start = 2005, frequency = 4)
+#' y <- x |> chain_from_pyp(2006)
+#' (x - pyp_from_chain(y)) |> round(5)
+#' set.seed(23)
+#' x <- sample(95:105, 24, TRUE) |>
+#'   matrix(ncol = 2) |>
+#'   ts(start = 2005, frequency = 4)
+#' y <- x |> chain_from_pyp(2006)
+#' (x - pyp_from_chain(y)) |> round(5)
+#' @export
+pyp_from_chain <- function(x) {
+  if (methods::is(x, "mts")) {
+    y <- apply_multivariate(x, pyp_from_chain_uni)
+  } else {
+    y <- pyp_from_chain_uni(x)
+  }
+  return(y)
 }
 
 #' Checks the reference period
@@ -75,10 +102,55 @@ check_reference <- function(x, ref_period, tol = 0.01) {
 #' aggregate(x, FUN = mean)
 #' y <- change_ref_year(x, 2007)
 #' aggregate(y, FUN = mean)
-#' plot(x)
-#' lines(y, col = "red")
+#' set.seed(23)
+#' x <- sample(95:105, 24, TRUE) |>
+#'   matrix(ncol = 2) |>
+#'   ts(start = 2005, frequency = 4) |>
+#'   chain_from_pyp(2006)
+#' aggregate(x, FUN = mean)
+#' y <- change_ref_year(x, 2007)
+#' aggregate(y, FUN = mean)
 #' @export
 change_ref_year <- function(x, new_ref) {
+  if (methods::is(x, "mts")) {
+    y <- apply_multivariate(x, change_ref_year_uni, new_ref)
+  } else {
+    y <- change_ref_year_uni(x, new_ref)
+  }
+  return(y)
+}
+
+#' Apply method to multivariate
+#'
+#' This function applies a function for univariate series ("ts") to a multivariate
+#' ("mts").
+#' @param x A multivariate time series of class "mts".
+#' @param f A function that takes an univariate series as input.
+#' @param ... Arguments for \code{f}.
+apply_multivariate <- function(x, f, ...){
+  n <- ncol(x)
+  y <- lapply(1:n, \(i) {
+    z <- f(x[,i], ...)
+    w <- ts(z, start = start(z), frequency = frequency(z))
+    return(w)
+  })
+  result <- do.call(cbind, y)
+  colnames(result) <- colnames(x)
+  return(result)
+}
+
+#' Change reference year (univariate)
+#'
+#' Changes the reference year of an univariate chain-linked series (with annual
+#' overlap).
+#' @param x An univariate chain-linked series (with annual overlap) of class "ts".
+#' @param new_ref New reference year. Must be such that \code{start(x) <=
+#' new_ref <= end(x)}.
+#' @returns The re-referenced index series of class "ts".
+#' @importFrom methods is
+#' @importFrom stats frequency
+#' @importFrom stats window
+change_ref_year_uni <- function(x, new_ref) {
   denom <- window(x, start = c(new_ref,1),
                   end = c(new_ref, frequency(x))) |>
     mean()
@@ -122,6 +194,23 @@ concat_references <- function(x1, x2, tol = 1e-2) {
   return(y)
 }
 
+#' Get chain-linked indices (univariate)
+#'
+#' Computes chain-linked index series from an univariate pyp series.
+#'
+#' @param x A pyp series of class "ts".
+#' @param ref_year Reference year ("num") for the chain-linked series.
+#' @param normalize Make reference year = 100.
+#' @returns The chain-linked series of class "ts".
+chain_from_pyp_uni <- function(x, ref_year, normalize = T) {
+  if (frequency(x) == 4) {
+    result <- chain_from_pyp_q(x, ref_year, normalize)
+  } else if (frequency(x) == 1) {
+    result <- chain_from_pyp_annual(x, ref_year, normalize)
+  }
+  return(result)
+}
+
 #' Get chain-linked indices
 #'
 #' Computes chain-linked index series from a pyp series.
@@ -132,14 +221,13 @@ concat_references <- function(x1, x2, tol = 1e-2) {
 #' @returns The chain-linked series of class "ts".
 #' @export
 chain_from_pyp <- function(x, ref_year, normalize = T) {
-  if (frequency(x) == 4) {
-    result <- chain_from_pyp_q(x, ref_year, normalize)
-  } else if (frequency(x) == 1) {
-    result <- chain_from_pyp_annual(x, ref_year, normalize)
+  if (methods::is(x, "mts")) {
+    y <- apply_multivariate(x, chain_from_pyp_uni, ref_year)
+  } else {
+    y <- chain_from_pyp_uni(x, ref_year)
   }
-  return(result)
+  return(y)
 }
-
 
 #' Get chain-linked indices
 #'
@@ -149,7 +237,6 @@ chain_from_pyp <- function(x, ref_year, normalize = T) {
 #' @param ref_year Reference year ("num") for the chain-linked series.
 #' @param normalize Make reference year = 100.
 #' @returns The chain-linked series of class "ts".
-#' @export
 chain_from_pyp_q <- function(x, ref_year, normalize = T) {
   x_pyp_a <- aggregate.ts(x, FUN = mean)
   x_chain_a <- chain_from_pyp_annual(x_pyp_a, ref_year)
@@ -171,7 +258,6 @@ chain_from_pyp_q <- function(x, ref_year, normalize = T) {
 #' @param ref_year Reference year ("num") for the chain-linked series.
 #' @param normalize Make reference year = 100.
 #' @returns The chain-linked series of class "ts".
-#' @export
 chain_from_pyp_annual <- function(x, ref_year, normalize = T) {
   chain <- cumprod(c(100,x/100)) |> ts(start = start(x)[1] - 1)
   if (normalize) {

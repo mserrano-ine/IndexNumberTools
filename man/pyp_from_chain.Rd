@@ -15,3 +15,16 @@ The pyp series of class "ts".
 \description{
 Computes the pyp index series from a chain-linked series.
 }
+\examples{
+set.seed(23)
+x <- sample(95:105, 24, TRUE) |>
+  ts(start = 2005, frequency = 4)
+y <- x |> chain_from_pyp(2006)
+(x - pyp_from_chain(y)) |> round(5)
+set.seed(23)
+x <- sample(95:105, 24, TRUE) |>
+  matrix(ncol = 2) |>
+  ts(start = 2005, frequency = 4)
+y <- x |> chain_from_pyp(2006)
+(x - pyp_from_chain(y)) |> round(5)
+}

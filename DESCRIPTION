@@ -1,7 +1,7 @@
 Package: IndexNumberTools
 Type: Package
 Title: Tools For Working With Index Numbers
-Version: 0.1.0
+Version: 0.2.0
 Author: Miguel Serrano
 Maintainer: Miguel Serano <miguel.serano.martin@ine.es>
 Description: Tools for transforming chain-linked to pyp and vice versa,
