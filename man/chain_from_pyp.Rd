@@ -4,12 +4,15 @@
 \alias{chain_from_pyp}
 \title{Get chain-linked indices}
 \usage{
-chain_from_pyp(x, ref_year, normalize = T)
+chain_from_pyp(x, ref_year, x_a = NULL)
 }
 \arguments{
 \item{x}{A pyp series of class "ts".}
 
 \item{ref_year}{Reference year ("num") for the chain-linked series.}
+
+\item{x_a}{Annual pyp series. If not given, it is assumed that it's computed
+like \code{x_a = aggregate.ts(x, FUN = mean)}.}
 
 \item{normalize}{Make reference year = 100.}
 }
@@ -18,4 +21,10 @@ The chain-linked series of class "ts".
 }
 \description{
 Computes chain-linked index series from a pyp series.
+}
+\details{
+The chain-linked series x_chain is computed with the annual overlap method.
+Suppose the x series runs from (y0, p0 = 0) to (y1, p1), where pi is a subyear
+period. Then the chain-linked series at (y2, p2) is given by the cumulative
+product of the annual series from y0 to y2-1 times x at (y2, p2).
 }
