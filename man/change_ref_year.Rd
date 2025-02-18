@@ -20,19 +20,8 @@ Changes the reference year of a chain-linked series (with annual
 overlap).
 }
 \examples{
-set.seed(23)
-x <- sample(95:105, 12, TRUE) |>
-  ts(start = 2005, frequency = 4) |>
-  chain_from_pyp(2006)
-aggregate(x, FUN = mean)
-y <- change_ref_year(x, 2007)
-aggregate(y, FUN = mean)
-set.seed(23)
-x <- sample(95:105, 24, TRUE) |>
-  matrix(ncol = 2) |>
-  ts(start = 2005, frequency = 4) |>
-  chain_from_pyp(2006)
-aggregate(x, FUN = mean)
-y <- change_ref_year(x, 2007)
-aggregate(y, FUN = mean)
+change_ref_year(gdp_es_volume, 2015)
+plot(gdp_es_volume)
+lines(change_ref_year(gdp_es_volume, 2015))
+
 }

@@ -3,7 +3,7 @@ Type: Package
 Title: Tools For Working With Index Numbers
 Version: 1.0
 Author: Miguel Serrano
-Maintainer: Miguel Serano <miguel.serano.martin@ine.es>
+Maintainer: Miguel Serrano <miguel.serano.martin@ine.es>
 Description: Tools for transforming chain-linked to pyp and vice versa,
     changing the reference year, etc.
 License: GPL (>= 2)
@@ -12,5 +12,7 @@ LazyData: true
 RoxygenNote: 7.3.2
 Imports: 
     methods,
-    stats,
-    TimeSeriesTools
+    stats
+Depends: 
+    R (>= 2.10)
+URL: https://mserrano-ine.github.io/IndexNumberTools/

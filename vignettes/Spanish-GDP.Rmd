@@ -1,0 +1,51 @@
+---
+title: "Spanish GDP"
+output: html_document
+hyphens: manual
+---
+
+The Spanish GDP in current prices is preloaded with the package as `gdp_es_current`, and the chain-linked volume (index) as `gpd_es_volume`. Multiplying the volume series by the mean of the current prices series at the reference year (2020), we obtain the GDP in constant prices.
+
+```{r include=FALSE}
+#library(IndexNumberTools)
+devtools::load_all()
+```
+
+
+```{r}
+ref_year_mean <- window(gdp_es_current,start = c(2020,1), end = c(2020,4)) |> mean()
+gdp_es_constant <- ref_year_mean * gdp_es_volume / 100
+```
+
+```{r echo=FALSE}
+plot(gdp_es_current, ylab="GDP")
+lines(gdp_es_constant, col = "red")
+legend(x = "bottomright",      # Posición
+       legend = c("current prices", "constant prices"), 
+       col = c("black", "red"),
+       lty = c(1,1))
+```
+
+By dividing the GDP in current prices by the GDP in constant prices, we derive the chain-linked implicit deflator of the GDP. Using `get_value_index()` and chain-linking the result with `chain_from_pyp()`, we get the chain-linked value indices.
+
+```{r}
+gdp_es_deflator <- gdp_es_current / gdp_es_constant * 100
+gdp_es_value <- get_v_index(gdp_es_current) |> get_chain_linked(2020)
+```
+
+Then, we can verify the identity $V = P\cdot Q$, that is, the value index must equal the product of the price and volume indices.
+
+```{r message=FALSE, warning=FALSE}
+dplyr::near(gdp_es_value, gdp_es_deflator * gdp_es_volume / 100) |> all()
+```
+
+```{r echo=FALSE}
+plot(gdp_es_volume, ylab = "index", col = "blue")
+lines(gdp_es_deflator, col = "red")
+lines(gdp_es_value, col = "green")
+legend(x = "bottomright",      # Posición
+       legend = c("volume", "price", "value"), 
+       col = c("blue", "red", "green"),
+       lty = c(1,1,1))
+```
+
