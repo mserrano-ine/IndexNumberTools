@@ -16,3 +16,8 @@ Imports:
 Depends: 
     R (>= 2.10)
 URL: https://mserrano-ine.github.io/IndexNumberTools/
+Suggests: 
+    knitr,
+    rmarkdown,
+    dplyr
+VignetteBuilder: knitr

@@ -7,9 +7,9 @@
 apply_to_columns(x, f, ...)
 }
 \arguments{
-\item{x}{A multivariate time series of class "mts".}
+\item{x}{(mts) A multivariate time series.}
 
-\item{f}{A function that takes an univariate series as input.}
+\item{f}{(function) A function that takes an univariate series as input.}
 
 \item{...}{Arguments for \code{f}.}
 }

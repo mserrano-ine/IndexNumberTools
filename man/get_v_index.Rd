@@ -21,6 +21,6 @@ The value of the resulting series x at (y,s), where y is the year and s
 is the subyear period, is current(y,s)/current(y)
 }
 \examples{
-get_v_index(gdp_es_current)
+get_v_index(gdp_current)
 
 }

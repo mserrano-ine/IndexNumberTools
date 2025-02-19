@@ -7,17 +7,15 @@
 get_chain_linked(x, ref_year, x_a = NULL)
 }
 \arguments{
-\item{x}{A pyp series of class "ts".}
+\item{x}{(ts) A pyp series.}
 
-\item{ref_year}{Reference year ("num") for the chain-linked series.}
+\item{ref_year}{(num) Reference year for the chain-linked series.}
 
-\item{x_a}{Annual pyp series. If not given, it is assumed that it's computed
-like \code{x_a = aggregate.ts(x, FUN = mean)}.}
-
-\item{normalize}{Make reference year = 100.}
+\item{x_a}{(ts) Annual pyp series. If not given, it's computed by taking the
+average of each year.}
 }
 \value{
-The chain-linked series of class "ts".
+The chain-linked series.
 }
 \description{
 Computes chain-linked index series from a pyp series.
@@ -29,7 +27,7 @@ period. Then the chain-linked series at (y2, p2) is given by the cumulative
 product of the annual series from y0 to y2-1 times x at (y2, p2).
 }
 \examples{
-gdp_es_pyp <- get_pyp(gdp_es_volume)
-get_chain_linked(gdp_es_pyp)
+gdp_pyp <- get_pyp(gdp_volume)
+get_chain_linked(gdp_pyp, 2015)
 
 }

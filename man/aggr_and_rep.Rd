@@ -23,5 +23,5 @@ Applies \code{aggregate.ts} to the series to get the annual values
 and then repeats those values for every subyear period.
 }
 \examples{
-rep_year_value(gdp_es_index) |> plot()
+aggr_and_rep(gdp_volume) |> plot()
 }

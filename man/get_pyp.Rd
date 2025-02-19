@@ -9,15 +9,19 @@ get_pyp(x, x_a = NULL)
 \arguments{
 \item{x}{(ts) Chain-linked series with annual overlap.}
 
-\item{x_a}{(ts) Annual chain-linked series.}
+\item{x_a}{(ts) Annual chain-linked series. If not given, it's computed by
+taking the average of each year.}
 }
 \value{
-The pyp series of class "ts".
+The pyp series.
 }
 \description{
 Computes the pyp index series from a chain-linked series.
 }
+\details{
+The time series should start at (y,1) where y is any year.
+}
 \examples{
-get_pyp(gdp_es_volume)
+get_pyp(gdp_volume)
 
 }

@@ -4,24 +4,23 @@
 \alias{change_ref_year}
 \title{Change reference year}
 \usage{
-change_ref_year(x, new_ref)
+change_ref_year(x, new_ref_year)
 }
 \arguments{
-\item{x}{A chain-linked series (with annual overlap) of class "ts".}
+\item{x}{(ts) A chain-linked series with annual overlap.}
 
-\item{new_ref}{New reference year. Must be such that \code{start(x) <=
-new_ref <= end(x)}.}
+\item{new_ref_year}{(num) New reference year.}
 }
 \value{
-The re-referenced index series of class "ts".
+The re-referenced index series.
 }
 \description{
 Changes the reference year of a chain-linked series (with annual
 overlap).
 }
 \examples{
-change_ref_year(gdp_es_volume, 2015)
-plot(gdp_es_volume)
-lines(change_ref_year(gdp_es_volume, 2015))
+change_ref_year(gdp_volume, 2015)
+plot(gdp_volume)
+lines(change_ref_year(gdp_volume, 2015))
 
 }

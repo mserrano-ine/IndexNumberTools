@@ -1,0 +1,61 @@
+---
+title: "2. Annual arguments"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{2. Annual arguments}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(IndexNumberTools)
+```
+
+
+By default, `get_chain_linked()` computes the necessary annual series by taking mean of each year like `aggregate.ts(x, FUN=mean)`. However, sometimes the annual index numbers are not equal to the mean of the subannual periods and, in that case, the chain-linked series will be wrongly computed. For these cases, the function includes the argument `x_a`, for us to introduce the correct annual indices.
+
+Let us work through an example. With the given `gdp_current` we can compute the `gdp_constant` series
+
+```{r}
+ref_year_mean <- window(gdp_current,start = c(2020,1), end = c(2020,4)) |> mean()
+gdp_constant <- ref_year_mean * gdp_volume / 100
+```
+
+and then, there are two possible definitions of the annual deflator:
+
+1. we can compute the quarterly price index and take the average value for each year
+
+```{r}
+gdp_deflator <- gdp_current / gdp_constant * 100
+gdp_deflator_mean <- aggregate.ts(gdp_deflator, FUN = mean)
+```
+
+2. we can obtain the annual series of current prices and constant prices by adding up the quarters, and then obtain a price index by dividing these
+
+```{r}
+gdp_deflator_sum <- aggregate.ts(gdp_current) / aggregate.ts(gdp_constant) * 100
+```
+
+The results of the definitions <a href="#footnote">differ</a> even from the second decimal place on.
+
+```{r}
+dplyr::near(gdp_deflator_mean, gdp_deflator_sum, tol = 1e-2) |> all()
+```
+Suppose now that we like better the second definition, because the resulting volumes are additive. Then, in order to obtain the price index for previous year prices, we must include `gdp_deflator_sum` as an argument. The result of not including it is, of course, different.
+
+```{r}
+gdp_deflator_pyp <- get_pyp(gdp_deflator, gdp_deflator_sum)
+gdp_deflator_pyp_wrong <- get_pyp(gdp_deflator)
+dplyr::near(gdp_deflator_pyp, gdp_deflator_pyp_wrong, tol = 1e-2) |> all()
+```
+</br>
+
+---
+<span style="font-size:0.75em"><span id ="footnote">1.</span> In general, they will not be the same. For current prices $\{C^{y,q}\}$, constant prices $\{K^{y,q}\}$, and price indices $\{IP^{y,q} = C^{y,q}/K^{y,q}\}$, the expression $$\frac{\sum_{q=1}^4C^{y,q}}{\sum_{q=1}^4K^{y,q}} = \sum_{q=1}^4\frac{K^{y,q}}{\sum_{s=1}^4K^{y,s}}IP^{y,q}$$ is different from $\frac{1}{4}\sum_{q=1}^4IP^{y,q}$ since, in general,${K^{y,q}/\sum_{s=1}^4K^{y,s} \neq \frac{1}{4}$.</span>

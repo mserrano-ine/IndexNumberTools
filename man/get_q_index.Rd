@@ -7,20 +7,19 @@
 get_q_index(current, constant)
 }
 \arguments{
-\item{current}{Current prices series of class "ts".}
+\item{current}{(ts) Values at current prices.}
 
-\item{constant}{Constant prices (pyp) series of class "ts".}
+\item{constant}{(ts) Values at previous year prices.}
 }
 \value{
-List of time series ("ts"): the quarterly IPs and IQs (pyp).
+Series of quantity indices for previous year prices.
 }
 \description{
 Returns the series of quantity indices in previous year prices from
 a current prices and
 }
 \examples{
-gdp_es_pyp <- get_pyp(gdp_es_volume)
-gdp_es_constant <- gdp_es_current / gdp_es_constant * 100
-get_q_index(gdp_es_current, gdp_es_constant)
-
+gdp_pyp <- get_pyp(gdp_volume)
+gdp_constant <- gdp_current / gdp_pyp * 100
+get_q_index(gdp_current, gdp_constant)
 }
