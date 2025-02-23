@@ -4,15 +4,20 @@
 \name{IndexNumberTools-package}
 \alias{IndexNumberTools}
 \alias{IndexNumberTools-package}
-\title{IndexNumberTools: Tools For Working With Index Numbers}
+\title{IndexNumberTools: Working With Index Numbers}
 \description{
-Tools for transforming chain-linked to pyp and vice versa, changing the reference year, etc.
+Chain-linking, base shifting, computing pyp indices, etc.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://mserrano-ine.github.io/IndexNumberTools/}
+  \item \url{https://github.com/mserrano-ine/IndexNumberTools}
 }
+
+}
+\author{
+\strong{Maintainer}: Miguel Serrano \email{miguel.serrano.martin@ine.es}
 
 }
 \keyword{internal}

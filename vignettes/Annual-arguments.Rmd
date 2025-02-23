@@ -39,7 +39,7 @@ gdp_deflator_mean <- aggregate.ts(gdp_deflator, FUN = mean)
 gdp_deflator_sum <- aggregate.ts(gdp_current) / aggregate.ts(gdp_constant) * 100
 ```
 
-The results of the definitions <a href="#footnote">differ</a> even from the second decimal place on.
+The results of the definitions differ even from the second decimal place on.<sup><a href="#footnote">1</a></sup>
 
 ```{r}
 dplyr::near(gdp_deflator_mean, gdp_deflator_sum, tol = 1e-2) |> all()
@@ -54,4 +54,4 @@ dplyr::near(gdp_deflator_pyp, gdp_deflator_pyp_wrong, tol = 1e-2) |> all()
 </br>
 
 ---
-<span style="font-size:0.75em"><span id ="footnote">1.</span> In general, they will not be the same. For current prices $\{C^{y,q}\}$, constant prices $\{K^{y,q}\}$, and price indices $\{IP^{y,q} = C^{y,q}/K^{y,q}\}$, the expression $$\frac{\sum_{q=1}^4C^{y,q}}{\sum_{q=1}^4K^{y,q}} = \sum_{q=1}^4\frac{K^{y,q}}{\sum_{s=1}^4K^{y,s}}IP^{y,q}$$ is different from $\frac{1}{4}\sum_{q=1}^4IP^{y,q}$ since, in general,${K^{y,q}/\sum_{s=1}^4K^{y,s} \neq \frac{1}{4}$.</span>
+<span style="font-size:0.75em"><span id ="footnote">1.</span> In general, they will not be the same. For current prices $\{C^{y,q}\}$, constant prices $\{K^{y,q}\}$, and price indices $\{IP^{y,q} = C^{y,q}/K^{y,q}\}$, the expression $$\frac{\sum_{q=1}^4C^{y,q}}{\sum_{q=1}^4K^{y,q}} = \sum_{q=1}^4\frac{K^{y,q}}{\sum_{s=1}^4K^{y,s}}IP^{y,q}$$ is different from $\frac{1}{4}\sum_{q=1}^4IP^{y,q}$ since, in general, $K^{y,q}/\sum_{s=1}^4K^{y,s} \neq \frac{1}{4}$.</span>

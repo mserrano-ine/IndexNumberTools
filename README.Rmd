@@ -1,0 +1,97 @@
+---
+output: github_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/",
+  dpi=300
+)
+```
+
+# IndexNumberTools
+
+**IndexNumberTools** intends to ease the everyday work of users and producers of index numbers by providing functionalities like chain-linking, base shifting or computing pyp indices.
+
+## Installation
+
+```{r, eval = FALSE}
+# Install released version from CRAN
+install.packages("IndexNumberTools")
+```
+
+## Getting started
+
+We'll work through an example using the [Spanish GDP](https://ine.es/dynt3/inebase/en/index.htm?padre=11371&capsel=11371) in current prices, which is preloaded as `gdp_current`, and the chain-linked volume (index), `gdp_volume`. 
+
+```{r include=FALSE}
+library(IndexNumberTools)
+```
+
+We can easily re-reference the volume series with `change_ref_year()`.[^slice]
+
+[^slice]: We show only a slice of the output.
+
+```{r}
+gdp_volume_2010 <- change_ref_year(gdp_volume, 2010)
+```
+
+```{r, echo=FALSE}
+volume <- cbind(aggregate.ts(gdp_volume, FUN = mean),
+                aggregate.ts(gdp_volume_2010, FUN = mean))
+colnames(volume) <- c("2020", "2010")
+window(volume, start = 2008, end = 2022)
+```
+
+We can also get the series at previous year prices from `gdp_volume` with  `get_pyp()`.[^annual]
+
+[^annual]: See the article "Annual arguments" for a detailed discussion.
+
+```{r}
+gdp_pyp <- get_pyp(gdp_volume)
+```
+
+```{r, echo = FALSE}
+plot(gdp_pyp, main = "GDP pyp index", ylab = "index")
+```
+
+Multiplying the volume series by the mean of the current prices series at the reference year (2020), we obtain the GDP in (chain-linked) constant prices.
+
+```{r}
+ref_year_mean <- window(gdp_current,start = c(2020,1), end = c(2020,4)) |> mean()
+gdp_constant <- ref_year_mean * gdp_volume / 100
+```
+
+By dividing the GDP in current prices by the GDP in constant prices, we derive the chain-linked implicit deflator of the GDP.
+
+```{r}
+gdp_deflator <- gdp_current / gdp_constant * 100
+```
+
+
+Using `get_v_index()` and chain-linking the result with `get_chain_linked()`, we get the chain-linked value indices.
+
+```{r}
+gdp_value <- get_v_index(gdp_current) |> get_chain_linked(2020)
+```
+
+Then, we can verify the identity $V = P\cdot Q$, that is, the value index must equal the product of the price and volume indices.
+
+```{r message=FALSE, warning=FALSE}
+dplyr::near(gdp_value, gdp_deflator * gdp_volume / 100) |> all()
+```
+
+```{r echo=FALSE}
+plot(gdp_volume, ylab = "index", col = "green", main = "Volume, price and value indices")
+lines(gdp_deflator, col = "red")
+lines(gdp_value, col = "blue")
+lines(gdp_deflator * gdp_volume / 100, col= "orange", lty=2)
+legend(x = "bottomright",      # Posición
+       legend = c("volume", "price", "value", "volume*price"), 
+       col = c("green", "red", "blue", "orange"),
+       lty = c(1,1,1,2))
+```
+
+
