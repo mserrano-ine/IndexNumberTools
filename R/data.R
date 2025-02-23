@@ -1,21 +1,19 @@
-#' Prices of over 50,000 round cut diamonds
+#' Spanish GDP (Current prices)
 #'
-#' A dataset containing the prices and other attributes of almost 54,000
-#'  diamonds. The variables are as follows:
+#' Spanish GDP from 1995 Q1 to 2024 Q4.
+#' @name gdp_current
+#' @docType data
+#' @format A univariate time series object.
 #'
-#' @format A data frame with 53940 rows and 10 variables:
-#' \describe{
-#'   \item{price}{price in US dollars ($326--$18,823)}
-#'   \item{carat}{weight of the diamond (0.2--5.01)}
-#'   \item{cut}{quality of the cut (Fair, Good, Very Good, Premium, Ideal)}
-#'   \item{color}{diamond colour, from D (best) to J (worst)}
-#'   \item{clarity}{a measurement of how clear the diamond is (I1 (worst), SI2,
-#'     SI1, VS2, VS1, VVS2, VVS1, IF (best))}
-#'   \item{x}{length in mm (0--10.74)}
-#'   \item{y}{width in mm (0--58.9)}
-#'   \item{z}{depth in mm (0--31.8)}
-#'   \item{depth}{total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)}
-#'   \item{table}{width of top of diamond relative to widest point (43--95)}
-#' }
+#' @source {https://ine.es/jaxiT3/Tabla.htm?t=67823&L=1} Spanish National Statistics Institute.
+NULL
+
+#' Spanish GDP (Chain-linked volume)
 #'
-#' @source {ggplot2} tidyverse R package.
+#' Quantity chain-linked indices of the Spanish GDP from 1995 Q1 to 2024 Q4 with reference year 2020.
+#' @name gdp_volume
+#' @docType data
+#' @format A univariate time series object
+#'
+#' @source {https://ine.es/jaxiT3/Tabla.htm?t=67824&L=1} Spanish National Statistics Institute.
+NULL

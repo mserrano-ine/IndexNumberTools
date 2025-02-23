@@ -1,24 +1,27 @@
-#' Aggregate and repeat
+#' Aggregate, repeat and lag
 #'
 #' Helper function to repeat the aggregate annual value of a series on
-#' each period.
+#' each period, and possibly lag it.
 #' @param x (ts) Any time series
 #' @param fun (function) Aggregation function, mean by default
+#' @param k (int) Units to lag.
 #' @details
 #' Applies \code{aggregate.ts} to the series to get the annual values
 #' and then repeats those values for every subyear period.
+#'
+#' The \code{k} parameter is passed to \code{stats::lag}.
 #' @returns description
 #' @examples
-#' aggr_and_rep(gdp_volume) |> plot()
+#' aggr_rep_lag(gdp_volume) |> plot()
 #' @export
-aggr_and_rep <- function(x, fun = mean) {
+aggr_rep_lag <- function(x, fun = mean, k = 0) {
   if (methods::is(x, "mts")) {
-    y <- apply_to_columns(x, aggr_and_rep)
+    y <- apply_to_columns(x, aggr_rep_lag, fun, k)
   } else {
     f <- frequency(x)
     ratio <- floor(length(x)/f)
     aux <- aggregate.ts(x, FUN = fun) |> rep(times = rep(f, ratio))
-    y <- ts(aux, start = start(x), frequency = f)
+    y <- ts(aux, start = start(x), frequency = f) |> stats::lag(k)
   }
   return(y)
 }
@@ -64,7 +67,7 @@ get_pyp <- function(x, x_a = NULL) {
     x_pyp <- apply_to_columns(x, get_pyp)
   } else {
     if (is.null(x_a)) {
-      aux <- aggr_and_rep(x) |> stats::lag(-f)
+      aux <- aggr_rep_lag(x) |> stats::lag(-f)
     } else {
       aux <- rep(x_a, times = rep(f, ratio)) |>
         stats::ts(start = stats::start(x), frequency = f) |>
@@ -165,7 +168,7 @@ get_q_index <- function(current, constant) {
     result <- do.call(cbind, y)
     colnames(result) <- colnames(current)
   } else if (!methods::is(current, "mts") & !methods::is(constant, "mts")) {
-    aux <- aggr_and_rep(current) |> stats::lag(-frequency(current))
+    aux <- aggr_rep_lag(current) |> stats::lag(-frequency(current))
     result <- constant / aux * 100
   }
   return(result)
@@ -189,7 +192,7 @@ get_v_index <- function(current) {
   if (methods::is(current, "mts")) {
     y <- apply_to_columns(current, get_v_index)
   } else {
-    aux <- aggr_and_rep(current) |> stats::lag(-frequency(current))
+    aux <- aggr_rep_lag(current) |> stats::lag(-frequency(current))
     y <- current / aux * 100
   }
   return(y)

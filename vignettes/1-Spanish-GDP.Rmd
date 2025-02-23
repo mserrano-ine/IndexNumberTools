@@ -1,8 +1,8 @@
 ---
-title: "1. Overview with Spanish GDP"
+title: "Overview with Spanish GDP"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{1. Overview with Spanish GDP}
+  %\VignetteIndexEntry{Overview with Spanish GDP}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -12,12 +12,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-```
-
-```{r setup}
 library(IndexNumberTools)
 ```
-
 
 The [Spanish GDP](https://ine.es/dynt3/inebase/en/index.htm?padre=11371&capsel=11371) in current prices is preloaded with the package as `gdp_current`, and the chain-linked volume (index) as `gdp_volume`. Multiplying the volume series by the mean of the current prices series at the reference year (2020), we obtain the GDP in constant prices.
 

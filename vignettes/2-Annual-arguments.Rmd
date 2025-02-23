@@ -1,8 +1,8 @@
 ---
-title: "2. Annual arguments"
+title: "Annual arguments"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{2. Annual arguments}
+  %\VignetteIndexEntry{Annual arguments}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -12,12 +12,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-```
-
-```{r setup}
 library(IndexNumberTools)
 ```
-
 
 By default, `get_chain_linked()` computes the necessary annual series by taking mean of each year like `aggregate.ts(x, FUN=mean)`. However, sometimes the annual index numbers are not equal to the mean of the subannual periods and, in that case, the chain-linked series will be wrongly computed. For these cases, the function includes the argument `x_a`, for us to introduce the correct annual indices.
 
