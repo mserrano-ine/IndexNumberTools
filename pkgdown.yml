@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   Annual-arguments: Annual-arguments.html
-last_built: 2025-02-23T12:52Z
+last_built: 2025-02-23T12:54Z
 urls:
   reference: https://mserrano-ine.github.io/IndexNumberTools/reference
   article: https://mserrano-ine.github.io/IndexNumberTools/articles
