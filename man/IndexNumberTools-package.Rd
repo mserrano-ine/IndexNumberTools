@@ -4,9 +4,9 @@
 \name{IndexNumberTools-package}
 \alias{IndexNumberTools}
 \alias{IndexNumberTools-package}
-\title{IndexNumberTools: Working With Index Numbers}
+\title{IndexNumberTools: Working with Index Numbers}
 \description{
-Chain-linking, base shifting, computing pyp indices, etc.
+A set of utilities for manipulating index numbers series including chain-linking, re-referencing, and computing growth rates.
 }
 \seealso{
 Useful links:

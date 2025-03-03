@@ -1,11 +1,11 @@
 Package: IndexNumberTools
 Type: Package
-Title: Working With Index Numbers
-Version: 1.0
+Title: Working with Index Numbers
+Version: 1.1
 Authors@R: 
     person("Miguel", "Serrano", , "miguel.serrano.martin@ine.es", 
             role = c("aut", "cre"))
-Description: Chain-linking, base shifting, computing pyp indices, etc.
+Description: A set of utilities for manipulating index numbers series including chain-linking, re-referencing, and computing growth rates.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
@@ -14,7 +14,7 @@ Imports:
     methods,
     stats
 Depends: 
-    R (>= 2.10)
+    R (>= 4.1.0)
 URL: https://mserrano-ine.github.io/IndexNumberTools/, https://github.com/mserrano-ine/IndexNumberTools
 Suggests: 
     knitr,

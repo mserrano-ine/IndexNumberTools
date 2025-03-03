@@ -2,6 +2,7 @@
 
 export(aggr_rep_lag)
 export(change_ref_year)
+export(compute_gr)
 export(get_chain_linked)
 export(get_pyp)
 export(get_q_index)

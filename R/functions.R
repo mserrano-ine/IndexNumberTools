@@ -197,3 +197,21 @@ get_v_index <- function(current) {
   }
   return(y)
 }
+
+#' Compute the growth-rate series
+#'
+#' Function that computes the growth-rate series of a given time series.
+#'
+#' @param x (ts) A time series.
+#' @param s (int) Lag at which the growth-rate is computed.
+#' @return Series of growth-rates.
+#' @examples
+#' compute_gr(gdp_current, 4)
+#' @export
+compute_gr <- function(x, s) {
+  gr <- (x / stats::lag(x, -s) - 1) *100
+  if (methods::is(x, "mts")) {
+    colnames(gr) <- colnames(x)
+  }
+  return(gr)
+}
